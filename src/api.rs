@@ -34,15 +34,16 @@ mod tests{
     use super::*;
 
     #[test]
-    fn test_api_get_on_array(){
+    fn test_api_creation(){
         let json_string = "[1, 2, 3, 4]".to_string();
         let g_son : Value = serde_json::from_str(&json_string[..]).unwrap();
-        let map = match g_son{
-            Value::Array(x) => x,
-            _ => vec![0]
-        };
-        let num_value : u64 = map[0].as_u64().unwrap();
-        assert_eq!(num_value, 1 as u64);
+        let api : API = API::new("id".to_string(), g_son);
+        assert_eq!(api.key, "id".to_string());
+    }
+
+    #[test]
+    fn test_api_get_on_array(){
+
     }
 }
 
