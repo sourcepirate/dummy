@@ -4,13 +4,15 @@ extern crate clap;
 mod api;
 mod reader;
 
-use clap::{Arg, App};
+use clap::{Arg, App, ArgMatches};
+use clap::AppSettings;
 
 fn main() {
-  let matches = App::new("Dummy JSON Server")
+  let app = App::new("Dummy JSON Server")
                     .version("1.0")
                     .author("sourcepirate")
                     .about("Fake JSON server")
+                    .setting(AppSettings::ArgRequiredElseHelp)
                     .arg(Arg::with_name("jsonfile")
                                .short("f")
                                .long("jsonfile")
@@ -22,10 +24,12 @@ fn main() {
                               .long("port")
                               .value_name("8000")
                               .help("Sets the port to serve")
-                              .takes_value(false))
-                    .get_matches();
+                              .takes_value(true));
+
+    let matches: ArgMatches = app.get_matches();
     let port = matches.value_of("port").unwrap_or("8000");
-    let file = matches.value_of("jsonfile").unwrap_or(".");
-    
-    println!("{:?} serving in {:?}", file, port);
+
+    if let Some(name) = matches.value_of("jsonfile") {
+      println!("{:?} serving in {:?}", name, port);
+    }
 }

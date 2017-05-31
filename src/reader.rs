@@ -33,7 +33,7 @@ impl Reader{
     
     pub fn contents(&self) -> Result<API, &'static str> {
        if !self.exists(){
-          Err("File doesnot exist")
+          Err("File does not exist")
        }
        else{
        let filepath = self.path.to_str().unwrap().to_string();
