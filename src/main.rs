@@ -3,6 +3,7 @@ extern crate clap;
 
 mod api;
 mod reader;
+mod server;
 
 use clap::{Arg, App, ArgMatches};
 use clap::AppSettings;
@@ -31,5 +32,8 @@ fn main() {
 
     if let Some(name) = matches.value_of("jsonfile") {
       println!("{:?} serving in {:?}", name, port);
+      let io_reader = reader::Reader::new("id".to_string(), name.to_string());
+      println!("{:?}", io_reader.contents().unwrap());
+      server::get_server();
     }
 }
