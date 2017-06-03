@@ -6,6 +6,7 @@ mod reader;
 mod server;
 
 use clap::{Arg, App, ArgMatches};
+use api::API;
 use clap::AppSettings;
 
 fn main() {
@@ -33,7 +34,9 @@ fn main() {
     if let Some(name) = matches.value_of("jsonfile") {
       println!("{:?} serving in {:?}", name, port);
       let io_reader = reader::Reader::new("id".to_string(), name.to_string());
-      println!("{:?}", io_reader.contents().unwrap());
-      server::get_server();
+      let contents : API = io_reader.contents().unwrap();
+      let mut bind = "0.0.0.0:".to_owned();
+      bind.push_str(port);
+      server::get_server(bind, contents);
     }
 }

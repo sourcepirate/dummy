@@ -1,9 +1,20 @@
 extern crate serde_json;
+extern crate hyper;
 
 use self::serde_json::Value;
 use self::serde_json::value::Index;
 
-#[derive(Debug, Clone)]
+use self::hyper::uri::RequestUri;
+
+fn safe_usize(val: &str) -> Option<usize>{
+    match val.trim().parse::<usize>(){
+        Ok(x) => Some(x),
+        Err(er) => None
+    }
+}
+
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct API {
     pub key: String,
     pub data: Value
@@ -19,7 +30,7 @@ impl API{
 
     pub fn get<T: Index + Sized>(&self, el : T) -> Option<Self> {
         match self.data.get(el) {
-            Some(data) => Some(API{
+            Some(data) => Some(API {
                 key: self.key.clone(),
                 data: data.clone()
             }),
@@ -33,6 +44,49 @@ impl API{
            _ => None
         }
     }
+
+    pub fn to_str(&self) -> Result<String, &'static str>{
+        Ok(self.data.to_string())
+    }
+
+    pub fn get_by_path(&self, path: RequestUri) -> Result<String, &'static str>{
+        if let RequestUri::AbsolutePath(loc) = path {
+            let loc_v = loc.split("/").filter(|x| x.len() > 0).collect();
+            let api_obj : API = self.navigate_out(loc_v).unwrap();
+            Ok(api_obj.data.to_string())
+        } else{
+            Err("Only absolute path for now")
+        }
+    }
+
+    pub fn get_by_index(&self, val: Option<usize>) -> Self {
+        if !val.is_none(){
+             match self.get(val.unwrap()) {
+                 Some(x) =>  x,
+                 None => API {
+                     key: self.key.clone(),
+                     data: Value::Array(vec![])
+                 }
+             }
+        } else {
+            API {
+                key: self.key.clone(),
+                data: Value::Array(vec![])
+            }
+        }
+    }
+
+    pub fn navigate_out(&self, routing: Vec<&str>) -> Option<Self> {
+        let mut value = self.clone();
+        for route in routing{
+            value = match value.get_resource(route) {
+                Some(x) => x,
+                None => value.get_by_index(safe_usize(route))
+            };
+        }
+        Some(value)
+    }
+
 }
 
 #[cfg(test)]
