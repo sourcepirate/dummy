@@ -1,9 +1,8 @@
 extern crate serde_json;
 
 use std::fs::File;
-use std::path::{Path, PathBuf};
+use std::path::{PathBuf};
 use std::env::{current_dir};
-use std::ffi::OsStr;
 use std::io::BufReader;
 use std::io::prelude::*;
 use api::API;
@@ -46,7 +45,7 @@ impl Reader{
                let api :API = API::new(self.id.clone(), value.clone());
                Ok(api.clone())
            },
-           Err(e) => Err("Error Reading")
+           Err(_) => Err("Error Reading")
        }
       }
     } 

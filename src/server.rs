@@ -4,8 +4,6 @@ extern crate hyper;
 use api::API;
 use std::sync::{Mutex, Arc};
 use self::hyper::server::{Handler, Server, Request, Response};
-use self::hyper::method::Method;
-use self::hyper::uri::RequestUri;
 
 
 pub struct DummyServer{

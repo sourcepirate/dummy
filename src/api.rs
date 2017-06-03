@@ -9,7 +9,7 @@ use self::hyper::uri::RequestUri;
 fn safe_usize(val: &str) -> Option<usize>{
     match val.trim().parse::<usize>(){
         Ok(x) => Some(x),
-        Err(er) => None
+        Err(_) => None
     }
 }
 
@@ -45,9 +45,6 @@ impl API{
         }
     }
 
-    pub fn to_str(&self) -> Result<String, &'static str>{
-        Ok(self.data.to_string())
-    }
 
     pub fn get_by_path(&self, path: RequestUri) -> Result<String, &'static str>{
         if let RequestUri::AbsolutePath(loc) = path {
