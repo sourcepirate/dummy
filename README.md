@@ -17,7 +17,7 @@ Once the binary is generated.
 ```
 cd target/debug
 
-./dummy  -f ../../sample/json_file_to_serve.json -p 8080
+./dummy  -f ../../samples/json_file_to_serve.json -p 8080
 
 ```
 
