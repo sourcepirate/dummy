@@ -1,10 +1,11 @@
 ## Dummy
 
-An Experimental cli JSON mock server entirely dedicated for me to learn rust. Serves any json through the traversal path.
+An Experimental CLI JSON mock server entirely dedicated for me to learn rust. Serves any json through the traversal path.
 
 ## Installing
 
-Make sure cargo is installed on your machine.
+Make sure cargo is installed on your machine. 
+To install cargo, you may follow: https://www.rust-lang.org/en-US/other-installers.html
 
 ```
 cargo build
@@ -16,7 +17,7 @@ Once the binary is generated.
 ```
 cd target/debug
 
-./dummy -f json_file_to_server.json -p 8080
+./dummy  -f ../../sample/json_file_to_serve.json -p 8080
 
 ```
 
